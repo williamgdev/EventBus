@@ -2,10 +2,15 @@ package com.mac.fireflies.wgt.eventbus;
 
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 
 /**
@@ -13,6 +18,8 @@ import android.view.ViewGroup;
  */
 public class ContentFragment extends Fragment {
 
+
+    private TextView textView;
 
     public ContentFragment() {
         // Required empty public constructor
@@ -27,10 +34,21 @@ public class ContentFragment extends Fragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        //EventBus.getDefault().register(this);
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        textView = (TextView) view.findViewById(R.id.content_text);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
 
+    @Subscribe
+    public void showTextEvent(StringEvent stringEvent){
+        textView.setText(stringEvent.getTexto());
+        EventBus.getDefault().unregister(this);
+        EventBus.getDefault().post(new StringEvent("Nice to meet you"));
+    }
 }

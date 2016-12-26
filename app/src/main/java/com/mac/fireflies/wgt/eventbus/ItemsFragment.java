@@ -8,8 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 
 /**
@@ -19,6 +21,7 @@ public class ItemsFragment extends Fragment {
 
 
     private Button button;
+    private TextView textView;
 
     public ItemsFragment() {
         // Required empty public constructor
@@ -36,11 +39,23 @@ public class ItemsFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         button = (Button) view.findViewById(R.id.item_button);
+        textView = (TextView) view.findViewById(R.id.item_text);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 EventBus.getDefault().post(new StringEvent("Hi from the items fragment"));
             }
         });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Subscribe
+    public void ShowTextEventAnswer(StringEvent answer){
+        textView.setText(answer.getTexto());
     }
 }
