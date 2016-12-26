@@ -26,4 +26,11 @@ public class ContentFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_content, container, false);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        //EventBus.getDefault().register(this);
+    }
+
+
 }
